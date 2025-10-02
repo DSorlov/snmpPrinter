@@ -7,17 +7,54 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    name: Validate
+  validate-hacs:
+    runs-on: "ubuntu-latest"
+    name: Validate with HACS
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
+      - name: Check out repository
+        uses: "actions/checkout@v4"
+      
       - name: HACS validation
-        uses: hacs/action@main
+        uses: "hacs/action@main"
         with:
-          category: integration
+          category: "integration"
 
+  validate-hassfest:
+    runs-on: "ubuntu-latest"
+    name: Validate with hassfest
+    steps:
+      - name: Check out repository
+        uses: "actions/checkout@v4"
+      
       - name: Hassfest validation
-        uses: home-assistant/actions/hassfest@master
+        uses: "home-assistant/actions/hassfest@master"
+
+  validate-syntax:
+    runs-on: "ubuntu-latest"
+    name: Validate Python syntax
+    steps:
+      - name: Check out repository
+        uses: "actions/checkout@v4"
+      
+      - name: Set up Python
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort flake8 PyYAML
+      
+      - name: Validate Python syntax
+        run: |
+          python -m py_compile custom_components/snmp_printer/*.py
+      
+      - name: Check JSON files
+        run: |
+          python -c "import json; json.load(open('custom_components/snmp_printer/manifest.json'))"
+          python -c "import json; json.load(open('hacs.json'))"
+            
+      - name: Check basic flake8
+        run: |
+          flake8 custom_components/snmp_printer --count --select=E9,F63,F7,F82 --show-source --statistics
