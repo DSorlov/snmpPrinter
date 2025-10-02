@@ -30,28 +30,28 @@ jobs:
     - name: Lint with flake8
       run: |
         # Stop the build if there are Python syntax errors or undefined names
-        flake8 custom_components/snmp_printer --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 custom_components/snmpPrinter --count --select=E9,F63,F7,F82 --show-source --statistics
         # Exit-zero treats all errors as warnings
-        flake8 custom_components/snmp_printer --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+        flake8 custom_components/snmpPrinter --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
 
     - name: Check code formatting with black
       run: |
-        black --check custom_components/snmp_printer
+        black --check custom_components/snmpPrinter
 
     - name: Check import sorting with isort
       run: |
-        isort --check-only custom_components/snmp_printer
+        isort --check-only custom_components/snmpPrinter
 
     - name: Type checking with mypy
       run: |
-        mypy custom_components/snmp_printer --ignore-missing-imports
+        mypy custom_components/snmpPrinter --ignore-missing-imports
       continue-on-error: true  # mypy can be strict, so don't fail CI
     
     - name: Validate JSON files
       run: |
-        python -m json.tool custom_components/snmp_printer/manifest.json > /dev/null
+        python -m json.tool custom_components/snmpPrinter/manifest.json > /dev/null
         python -m json.tool hacs.json > /dev/null
-        for file in custom_components/snmp_printer/translations/*.json; do
+        for file in custom_components/snmpPrinter/translations/*.json; do
           echo "Validating $file"
           python -m json.tool "$file" > /dev/null
         done

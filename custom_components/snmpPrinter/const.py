@@ -1,7 +1,7 @@
 """Constants for the SNMP Printer integration."""
 from typing import Final
 
-DOMAIN: Final = "snmp_printer"
+DOMAIN: Final = "snmpPrinter"
 
 # Configuration
 CONF_UPDATE_INTERVAL: Final = "update_interval"

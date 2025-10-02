@@ -23,7 +23,7 @@ jobs:
       - name: Validate version
         run: |
           version=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
-          manifest_version=$(grep '"version"' custom_components/snmp_printer/manifest.json | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+          manifest_version=$(grep '"version"' custom_components/snmpPrinter/manifest.json | sed 's/.*"version": *"\([^"]*\)".*/\1/')
           
           if [ "$version" != "$manifest_version" ]; then
             echo "Version mismatch: Release $version != Manifest $manifest_version"

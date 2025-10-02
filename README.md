@@ -44,8 +44,8 @@ For each configured printer, the integration creates:
 
 ### Manual Installation
 
-1. Download the latest release from [GitHub](https://github.com/dsorlov/snmp_printer/releases)
-2. Extract the `custom_components/snmp_printer` folder to your Home Assistant's `custom_components` directory
+1. Download the latest release from [GitHub](https://github.com/dsorlov/snmpPrinter/releases)
+2. Extract the `custom_components/snmpPrinter` folder to your Home Assistant's `custom_components` directory
 3. Restart Home Assistant
 
 ## Configuration
@@ -181,9 +181,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- :bug: [Report a Bug](https://github.com/dsorlov/snmp_printer/issues)
-- :bulb: [Request a Feature](https://github.com/dsorlov/snmp_printer/issues)
-- :book: [Documentation](https://github.com/dsorlov/snmp_printer)
+- :bug: [Report a Bug](https://github.com/dsorlov/snmpPrinter/issues)
+- :bulb: [Request a Feature](https://github.com/dsorlov/snmpPrinter/issues)
+- :book: [Documentation](https://github.com/dsorlov/snmpPrinter)
 
 ## Changelog
 

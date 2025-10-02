@@ -1,5 +1,5 @@
 {
-  "domain": "snmp_printer",
+  "domain": "snmpPrinter",
   "name": "SNMP Printer",
   "icon": "mdi:printer-wireless"
 }

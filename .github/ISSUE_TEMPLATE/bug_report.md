@@ -33,7 +33,7 @@ Please provide relevant logs from Home Assistant. Enable debug logging:
 ```yaml
 logger:
   logs:
-    custom_components.snmp_printer: debug
+    custom_components.snmpPrinter: debug
 ```
 
 ```
