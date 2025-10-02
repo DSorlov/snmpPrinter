@@ -403,8 +403,6 @@ class SNMPClient:
         errors = await self._get_oid(OID_DEVICE_ERRORS)
         return errors if errors and errors != "0" and errors != "" else None
 
-    return {}
-
     async def get_page_counts(self) -> dict[str, int]:
         """Get page counts including total, color, and black/white pages."""
         # Walk the page count OID to get all marker impression counts
