@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "SNMP-Drucker einrichten",
+        "description": "Konfigurieren Sie Ihren SNMP-fähigen Drucker"
+      },
+      "zeroconf_confirm": {
+        "title": "SNMP-Drucker erkannt",
+        "description": "Möchten Sie diesen Drucker hinzufügen?\n\n**Modell:** {model}\n**Hersteller:** {manufacturer}\n**IP-Adresse:** {host}"
+      },
+      "manual": {
+        "title": "SNMP-Drucker konfigurieren",
+        "description": "Geben Sie die Details für Ihren SNMP-fähigen Drucker ein",
+        "data": {
+          "host": "IP-Adresse",
+          "port": "Port",
+          "snmp_version": "SNMP-Version",
+          "community": "Community-Zeichenfolge",
+          "username": "Benutzername",
+          "auth_protocol": "Authentifizierungsprotokoll",
+          "auth_key": "Authentifizierungsschlüssel",
+          "priv_protocol": "Datenschutzprotokoll",
+          "priv_key": "Datenschutzschlüssel",
+          "update_interval": "Aktualisierungsintervall (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Drucker fehlgeschlagen. Überprüfen Sie Ihre Einstellungen und stellen Sie sicher, dass SNMP aktiviert ist.",
+      "unknown": "Unerwarteter Fehler aufgetreten"
+    },
+    "abort": {
+      "already_configured": "Dieser Drucker ist bereits konfiguriert",
+      "not_printer": "Das erkannte Gerät ist kein SNMP-fähiger Drucker"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SNMP-Druckereinstellungen aktualisieren",
+        "description": "Aktualisieren Sie die Konfiguration für diesen Drucker",
+        "data": {
+          "community": "Community-Zeichenfolge",
+          "username": "Benutzername",
+          "auth_protocol": "Authentifizierungsprotokoll",
+          "auth_key": "Authentifizierungsschlüssel",
+          "priv_protocol": "Datenschutzprotokoll",
+          "priv_key": "Datenschutzschlüssel",
+          "update_interval": "Aktualisierungsintervall (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung mit den neuen Einstellungen fehlgeschlagen. Überprüfen Sie Ihre Konfiguration."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status"
+      },
+      "page_count": {
+        "name": "Seitenzähler"
+      },
+      "cover_status": {
+        "name": "Abdeckungsstatus"
+      },
+      "errors": {
+        "name": "Fehler"
+      },
+      "display": {
+        "name": "Anzeige"
+      },
+      "black": {
+        "name": "Schwarz"
+      },
+      "cyan": {
+        "name": "Cyan"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Gelb"
+      },
+      "light_cyan": {
+        "name": "Hellcyan"
+      },
+      "light_magenta": {
+        "name": "Hellmagenta"
+      },
+      "photo": {
+        "name": "Foto"
+      },
+      "gray": {
+        "name": "Grau"
+      },
+      "tray_1": {
+        "name": "Fach 1"
+      },
+      "tray_2": {
+        "name": "Fach 2"
+      },
+      "tray_3": {
+        "name": "Fach 3"
+      },
+      "tray_4": {
+        "name": "Fach 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Text anzeigen",
+      "description": "Text auf dem Druckerbildschirm anzeigen (falls unterstützt)",
+      "fields": {
+        "device_id": {
+          "name": "Gerät",
+          "description": "Das Druckergerät"
+        },
+        "text": {
+          "name": "Text",
+          "description": "Auf dem Drucker anzuzeigender Text"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "SNMP Printer Setup",
+        "description": "Configure your SNMP-enabled printer"
+      },
+      "zeroconf_confirm": {
+        "title": "Discovered SNMP Printer",
+        "description": "Do you want to add this printer?\n\n**Model:** {model}\n**Manufacturer:** {manufacturer}\n**IP Address:** {host}"
+      },
+      "manual": {
+        "title": "Configure SNMP Printer",
+        "description": "Enter details for your SNMP-enabled printer",
+        "data": {
+          "host": "IP Address",
+          "port": "Port",
+          "snmp_version": "SNMP Version",
+          "community": "Community String",
+          "username": "Username",
+          "auth_protocol": "Authentication Protocol",
+          "auth_key": "Authentication Key",
+          "priv_protocol": "Privacy Protocol",
+          "priv_key": "Privacy Key",
+          "update_interval": "Update Interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the printer. Check your settings and ensure SNMP is enabled.",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "This printer is already configured",
+      "not_printer": "The discovered device is not an SNMP-enabled printer"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Update SNMP Printer Settings",
+        "description": "Update the configuration for this printer",
+        "data": {
+          "community": "Community String",
+          "username": "Username",
+          "auth_protocol": "Authentication Protocol",
+          "auth_key": "Authentication Key",
+          "priv_protocol": "Privacy Protocol",
+          "priv_key": "Privacy Key",
+          "update_interval": "Update Interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect with the new settings. Check your configuration."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status"
+      },
+      "page_count": {
+        "name": "Page count"
+      },
+      "cover_status": {
+        "name": "Cover status"
+      },
+      "errors": {
+        "name": "Errors"
+      },
+      "display": {
+        "name": "Display"
+      },
+      "black": {
+        "name": "Black"
+      },
+      "cyan": {
+        "name": "Cyan"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Yellow"
+      },
+      "light_cyan": {
+        "name": "Light cyan"
+      },
+      "light_magenta": {
+        "name": "Light magenta"
+      },
+      "photo": {
+        "name": "Photo"
+      },
+      "gray": {
+        "name": "Gray"
+      },
+      "tray_1": {
+        "name": "Tray 1"
+      },
+      "tray_2": {
+        "name": "Tray 2"
+      },
+      "tray_3": {
+        "name": "Tray 3"
+      },
+      "tray_4": {
+        "name": "Tray 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Display Text",
+      "description": "Display text on the printer's screen (if supported)",
+      "fields": {
+        "device_id": {
+          "name": "Device",
+          "description": "The printer device"
+        },
+        "text": {
+          "name": "Text",
+          "description": "Text to display on the printer"
+        }
+      }
+    }
+  }
+}

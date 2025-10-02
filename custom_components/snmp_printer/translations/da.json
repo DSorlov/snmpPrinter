@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "SNMP-printer opsætning",
+        "description": "Konfigurer din SNMP-aktiverede printer"
+      },
+      "zeroconf_confirm": {
+        "title": "Opdaget SNMP-printer",
+        "description": "Vil du tilføje denne printer?\n\n**Model:** {model}\n**Producent:** {manufacturer}\n**IP-adresse:** {host}"
+      },
+      "manual": {
+        "title": "Konfigurer SNMP-printer",
+        "description": "Indtast detaljer for din SNMP-aktiverede printer",
+        "data": {
+          "host": "IP-adresse",
+          "port": "Port",
+          "snmp_version": "SNMP-version",
+          "community": "Community-streng",
+          "username": "Brugernavn",
+          "auth_protocol": "Autentificeringsprotokol",
+          "auth_key": "Autentificeringsnøgle",
+          "priv_protocol": "Privatlivsprotokol",
+          "priv_key": "Privatlivsnøgle",
+          "update_interval": "Opdateringsinterval (sekunder)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kunne ikke oprette forbindelse til printeren. Kontroller dine indstillinger og sørg for, at SNMP er aktiveret.",
+      "unknown": "Uventet fejl opstod"
+    },
+    "abort": {
+      "already_configured": "Denne printer er allerede konfigureret",
+      "not_printer": "Den opdagede enhed er ikke en SNMP-aktiveret printer"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opdater SNMP-printerindstillinger",
+        "description": "Opdater konfigurationen for denne printer",
+        "data": {
+          "community": "Community-streng",
+          "username": "Brugernavn",
+          "auth_protocol": "Autentificeringsprotokol",
+          "auth_key": "Autentificeringsnøgle",
+          "priv_protocol": "Privatlivsprotokol",
+          "priv_key": "Privatlivsnøgle",
+          "update_interval": "Opdateringsinterval (sekunder)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kunne ikke oprette forbindelse med de nye indstillinger. Kontroller din konfiguration."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status"
+      },
+      "page_count": {
+        "name": "Sidetæller"
+      },
+      "cover_status": {
+        "name": "Dækselstatus"
+      },
+      "errors": {
+        "name": "Fejl"
+      },
+      "display": {
+        "name": "Display"
+      },
+      "black": {
+        "name": "Sort"
+      },
+      "cyan": {
+        "name": "Cyan"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Gul"
+      },
+      "light_cyan": {
+        "name": "Lys cyan"
+      },
+      "light_magenta": {
+        "name": "Lys magenta"
+      },
+      "photo": {
+        "name": "Foto"
+      },
+      "gray": {
+        "name": "Grå"
+      },
+      "tray_1": {
+        "name": "Bakke 1"
+      },
+      "tray_2": {
+        "name": "Bakke 2"
+      },
+      "tray_3": {
+        "name": "Bakke 3"
+      },
+      "tray_4": {
+        "name": "Bakke 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Vis tekst",
+      "description": "Vis tekst på printerens skærm (hvis understøttet)",
+      "fields": {
+        "device_id": {
+          "name": "Enhed",
+          "description": "Printerenheden"
+        },
+        "text": {
+          "name": "Tekst",
+          "description": "Tekst der skal vises på printeren"
+        }
+      }
+    }
+  }
+}

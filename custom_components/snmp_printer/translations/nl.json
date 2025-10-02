@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "SNMP-printer instellen",
+        "description": "Configureer uw SNMP-compatibele printer"
+      },
+      "zeroconf_confirm": {
+        "title": "SNMP-printer ontdekt",
+        "description": "Wilt u deze printer toevoegen?\n\n**Model:** {model}\n**Fabrikant:** {manufacturer}\n**IP-adres:** {host}"
+      },
+      "manual": {
+        "title": "SNMP-printer configureren",
+        "description": "Voer de gegevens in voor uw SNMP-compatibele printer",
+        "data": {
+          "host": "IP-adres",
+          "port": "Poort",
+          "snmp_version": "SNMP-versie",
+          "community": "Community-string",
+          "username": "Gebruikersnaam",
+          "auth_protocol": "Authenticatieprotocol",
+          "auth_key": "Authenticatiesleutel",
+          "priv_protocol": "Privacyprotocol",
+          "priv_key": "Privacysleutel",
+          "update_interval": "Update-interval (seconden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken met de printer. Controleer uw instellingen en zorg ervoor dat SNMP is ingeschakeld.",
+      "unknown": "Onverwachte fout opgetreden"
+    },
+    "abort": {
+      "already_configured": "Deze printer is al geconfigureerd",
+      "not_printer": "Het ontdekte apparaat is geen SNMP-compatibele printer"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SNMP-printerinstellingen bijwerken",
+        "description": "Werk de configuratie voor deze printer bij",
+        "data": {
+          "community": "Community-string",
+          "username": "Gebruikersnaam",
+          "auth_protocol": "Authenticatieprotocol",
+          "auth_key": "Authenticatiesleutel",
+          "priv_protocol": "Privacyprotocol",
+          "priv_key": "Privacysleutel",
+          "update_interval": "Update-interval (seconden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken met de nieuwe instellingen. Controleer uw configuratie."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status"
+      },
+      "page_count": {
+        "name": "Paginateller"
+      },
+      "cover_status": {
+        "name": "Dekselstatus"
+      },
+      "errors": {
+        "name": "Fouten"
+      },
+      "display": {
+        "name": "Weergave"
+      },
+      "black": {
+        "name": "Zwart"
+      },
+      "cyan": {
+        "name": "Cyaan"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Geel"
+      },
+      "light_cyan": {
+        "name": "Licht cyaan"
+      },
+      "light_magenta": {
+        "name": "Licht magenta"
+      },
+      "photo": {
+        "name": "Foto"
+      },
+      "gray": {
+        "name": "Grijs"
+      },
+      "tray_1": {
+        "name": "Lade 1"
+      },
+      "tray_2": {
+        "name": "Lade 2"
+      },
+      "tray_3": {
+        "name": "Lade 3"
+      },
+      "tray_4": {
+        "name": "Lade 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Tekst weergeven",
+      "description": "Tekst weergeven op het printerscherm (indien ondersteund)",
+      "fields": {
+        "device_id": {
+          "name": "Apparaat",
+          "description": "Het printerapparaat"
+        },
+        "text": {
+          "name": "Tekst",
+          "description": "Tekst om op de printer weer te geven"
+        }
+      }
+    }
+  }
+}

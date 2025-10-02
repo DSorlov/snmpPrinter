@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#2196F3"/>
+  
+  <!-- Printer body -->
+  <g transform="translate(256, 256)">
+    <!-- Top paper tray -->
+    <rect x="-100" y="-140" width="200" height="30" rx="5" fill="#FFFFFF"/>
+    <rect x="-90" y="-135" width="180" height="20" fill="#E3F2FD"/>
+    
+    <!-- Main printer body -->
+    <rect x="-120" y="-110" width="240" height="140" rx="8" fill="#FFFFFF"/>
+    
+    <!-- Control panel -->
+    <rect x="-110" y="-90" width="220" height="50" rx="4" fill="#1976D2"/>
+    
+    <!-- Display screen -->
+    <rect x="-100" y="-80" width="100" height="30" rx="2" fill="#0D47A1"/>
+    
+    <!-- Buttons -->
+    <circle cx="30" cy="-65" r="8" fill="#4CAF50"/>
+    <circle cx="55" cy="-65" r="8" fill="#FFC107"/>
+    <circle cx="80" cy="-65" r="8" fill="#F44336"/>
+    
+    <!-- Paper slot -->
+    <rect x="-80" y="-25" width="160" height="15" rx="2" fill="#424242"/>
+    <rect x="-75" y="-22" width="150" height="9" fill="#1976D2"/>
+    
+    <!-- Bottom paper tray -->
+    <rect x="-100" y="30" width="200" height="40" rx="5" fill="#FFFFFF"/>
+    <path d="M -90 40 L -90 65 L 90 65 L 90 40" fill="#E3F2FD"/>
+    
+    <!-- Paper coming out -->
+    <rect x="-60" y="60" width="120" height="50" rx="3" fill="#FFFFFF" opacity="0.9"/>
+    <line x1="-50" y1="70" x2="50" y2="70" stroke="#BBDEFB" stroke-width="2"/>
+    <line x1="-50" y1="80" x2="50" y2="80" stroke="#BBDEFB" stroke-width="2"/>
+    <line x1="-50" y1="90" x2="50" y2="90" stroke="#BBDEFB" stroke-width="2"/>
+  </g>
+  
+  <!-- SNMP Text -->
+  <text x="256" y="440" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#FFFFFF" text-anchor="middle">SNMP</text>
+</svg>

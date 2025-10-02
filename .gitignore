@@ -1,0 +1,40 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Docker testing environment
+testing/config/.storage/
+testing/config/home-assistant_v2.db*
+testing/config/*.log
+testing/config/.HA_VERSION
+testing/config/deps/
+testing/config/tts/

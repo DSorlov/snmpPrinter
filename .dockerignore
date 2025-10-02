@@ -1,0 +1,31 @@
+# Don't include testing data in any Docker builds
+testing/config/.storage
+testing/config/home-assistant_v2.db*
+testing/config/*.log
+
+# Python cache
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Documentation (large files)
+*.md
+!README.md
+
+# CI/CD
+.github
+
+# Other
+.DS_Store
+*.bak

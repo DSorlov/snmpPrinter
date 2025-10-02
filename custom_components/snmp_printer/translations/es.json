@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Configuración de impresora SNMP",
+        "description": "Configure su impresora compatible con SNMP"
+      },
+      "zeroconf_confirm": {
+        "title": "Impresora SNMP descubierta",
+        "description": "¿Desea agregar esta impresora?\n\n**Modelo:** {model}\n**Fabricante:** {manufacturer}\n**Dirección IP:** {host}"
+      },
+      "manual": {
+        "title": "Configurar impresora SNMP",
+        "description": "Ingrese los detalles de su impresora compatible con SNMP",
+        "data": {
+          "host": "Dirección IP",
+          "port": "Puerto",
+          "snmp_version": "Versión SNMP",
+          "community": "Cadena de comunidad",
+          "username": "Nombre de usuario",
+          "auth_protocol": "Protocolo de autenticación",
+          "auth_key": "Clave de autenticación",
+          "priv_protocol": "Protocolo de privacidad",
+          "priv_key": "Clave de privacidad",
+          "update_interval": "Intervalo de actualización (segundos)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "No se pudo conectar a la impresora. Verifique su configuración y asegúrese de que SNMP esté habilitado.",
+      "unknown": "Ocurrió un error inesperado"
+    },
+    "abort": {
+      "already_configured": "Esta impresora ya está configurada",
+      "not_printer": "El dispositivo descubierto no es una impresora compatible con SNMP"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Actualizar configuración de impresora SNMP",
+        "description": "Actualice la configuración de esta impresora",
+        "data": {
+          "community": "Cadena de comunidad",
+          "username": "Nombre de usuario",
+          "auth_protocol": "Protocolo de autenticación",
+          "auth_key": "Clave de autenticación",
+          "priv_protocol": "Protocolo de privacidad",
+          "priv_key": "Clave de privacidad",
+          "update_interval": "Intervalo de actualización (segundos)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "No se pudo conectar con la nueva configuración. Verifique su configuración."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Estado"
+      },
+      "page_count": {
+        "name": "Contador de páginas"
+      },
+      "cover_status": {
+        "name": "Estado de la cubierta"
+      },
+      "errors": {
+        "name": "Errores"
+      },
+      "display": {
+        "name": "Pantalla"
+      },
+      "black": {
+        "name": "Negro"
+      },
+      "cyan": {
+        "name": "Cian"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Amarillo"
+      },
+      "light_cyan": {
+        "name": "Cian claro"
+      },
+      "light_magenta": {
+        "name": "Magenta claro"
+      },
+      "photo": {
+        "name": "Foto"
+      },
+      "gray": {
+        "name": "Gris"
+      },
+      "tray_1": {
+        "name": "Bandeja 1"
+      },
+      "tray_2": {
+        "name": "Bandeja 2"
+      },
+      "tray_3": {
+        "name": "Bandeja 3"
+      },
+      "tray_4": {
+        "name": "Bandeja 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Mostrar texto",
+      "description": "Mostrar texto en la pantalla de la impresora (si es compatible)",
+      "fields": {
+        "device_id": {
+          "name": "Dispositivo",
+          "description": "La impresora"
+        },
+        "text": {
+          "name": "Texto",
+          "description": "Texto a mostrar en la impresora"
+        }
+      }
+    }
+  }
+}

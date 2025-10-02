@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "SNMP-tulostimen asetukset",
+        "description": "Määritä SNMP-yhteensopiva tulostin"
+      },
+      "zeroconf_confirm": {
+        "title": "Havaittu SNMP-tulostin",
+        "description": "Haluatko lisätä tämän tulostimen?\n\n**Malli:** {model}\n**Valmistaja:** {manufacturer}\n**IP-osoite:** {host}"
+      },
+      "manual": {
+        "title": "Määritä SNMP-tulostin",
+        "description": "Syötä SNMP-yhteensopivan tulostimen tiedot",
+        "data": {
+          "host": "IP-osoite",
+          "port": "Portti",
+          "snmp_version": "SNMP-versio",
+          "community": "Community-merkkijono",
+          "username": "Käyttäjänimi",
+          "auth_protocol": "Todennusprotokolla",
+          "auth_key": "Todennusavain",
+          "priv_protocol": "Yksityisyysprotokolla",
+          "priv_key": "Yksityisyysavain",
+          "update_interval": "Päivitysväli (sekuntia)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Tulostimeen ei voitu muodostaa yhteyttä. Tarkista asetuksesi ja varmista, että SNMP on käytössä.",
+      "unknown": "Odottamaton virhe tapahtui"
+    },
+    "abort": {
+      "already_configured": "Tämä tulostin on jo määritetty",
+      "not_printer": "Havaittu laite ei ole SNMP-yhteensopiva tulostin"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Päivitä SNMP-tulostimen asetukset",
+        "description": "Päivitä tämän tulostimen määritykset",
+        "data": {
+          "community": "Community-merkkijono",
+          "username": "Käyttäjänimi",
+          "auth_protocol": "Todennusprotokolla",
+          "auth_key": "Todennusavain",
+          "priv_protocol": "Yksityisyysprotokolla",
+          "priv_key": "Yksityisyysavain",
+          "update_interval": "Päivitysväli (sekuntia)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Uusilla asetuksilla ei voitu muodostaa yhteyttä. Tarkista määritykset."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Tila"
+      },
+      "page_count": {
+        "name": "Sivulaskuri"
+      },
+      "cover_status": {
+        "name": "Kannen tila"
+      },
+      "errors": {
+        "name": "Virheet"
+      },
+      "display": {
+        "name": "Näyttö"
+      },
+      "black": {
+        "name": "Musta"
+      },
+      "cyan": {
+        "name": "Syaani"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Keltainen"
+      },
+      "light_cyan": {
+        "name": "Vaalean syaani"
+      },
+      "light_magenta": {
+        "name": "Vaalean magenta"
+      },
+      "photo": {
+        "name": "Valokuva"
+      },
+      "gray": {
+        "name": "Harmaa"
+      },
+      "tray_1": {
+        "name": "Lokero 1"
+      },
+      "tray_2": {
+        "name": "Lokero 2"
+      },
+      "tray_3": {
+        "name": "Lokero 3"
+      },
+      "tray_4": {
+        "name": "Lokero 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Näytä tekstiä",
+      "description": "Näytä tekstiä tulostimen näytöllä (jos tuettu)",
+      "fields": {
+        "device_id": {
+          "name": "Laite",
+          "description": "Tulostinlaite"
+        },
+        "text": {
+          "name": "Teksti",
+          "description": "Tulostimessa näytettävä teksti"
+        }
+      }
+    }
+  }
+}

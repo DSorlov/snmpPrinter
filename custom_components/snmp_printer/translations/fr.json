@@ -1,0 +1,130 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Configuration de l'imprimante SNMP",
+        "description": "Configurez votre imprimante compatible SNMP"
+      },
+      "zeroconf_confirm": {
+        "title": "Imprimante SNMP découverte",
+        "description": "Voulez-vous ajouter cette imprimante ?\n\n**Modèle :** {model}\n**Fabricant :** {manufacturer}\n**Adresse IP :** {host}"
+      },
+      "manual": {
+        "title": "Configurer l'imprimante SNMP",
+        "description": "Entrez les détails de votre imprimante compatible SNMP",
+        "data": {
+          "host": "Adresse IP",
+          "port": "Port",
+          "snmp_version": "Version SNMP",
+          "community": "Chaîne de communauté",
+          "username": "Nom d'utilisateur",
+          "auth_protocol": "Protocole d'authentification",
+          "auth_key": "Clé d'authentification",
+          "priv_protocol": "Protocole de confidentialité",
+          "priv_key": "Clé de confidentialité",
+          "update_interval": "Intervalle de mise à jour (secondes)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion à l'imprimante. Vérifiez vos paramètres et assurez-vous que SNMP est activé.",
+      "unknown": "Une erreur inattendue s'est produite"
+    },
+    "abort": {
+      "already_configured": "Cette imprimante est déjà configurée",
+      "not_printer": "L'appareil découvert n'est pas une imprimante compatible SNMP"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Mettre à jour les paramètres de l'imprimante SNMP",
+        "description": "Mettez à jour la configuration de cette imprimante",
+        "data": {
+          "community": "Chaîne de communauté",
+          "username": "Nom d'utilisateur",
+          "auth_protocol": "Protocole d'authentification",
+          "auth_key": "Clé d'authentification",
+          "priv_protocol": "Protocole de confidentialité",
+          "priv_key": "Clé de confidentialité",
+          "update_interval": "Intervalle de mise à jour (secondes)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion avec les nouveaux paramètres. Vérifiez votre configuration."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "État"
+      },
+      "page_count": {
+        "name": "Compteur de pages"
+      },
+      "cover_status": {
+        "name": "État du capot"
+      },
+      "errors": {
+        "name": "Erreurs"
+      },
+      "display": {
+        "name": "Affichage"
+      },
+      "black": {
+        "name": "Noir"
+      },
+      "cyan": {
+        "name": "Cyan"
+      },
+      "magenta": {
+        "name": "Magenta"
+      },
+      "yellow": {
+        "name": "Jaune"
+      },
+      "light_cyan": {
+        "name": "Cyan clair"
+      },
+      "light_magenta": {
+        "name": "Magenta clair"
+      },
+      "photo": {
+        "name": "Photo"
+      },
+      "gray": {
+        "name": "Gris"
+      },
+      "tray_1": {
+        "name": "Bac 1"
+      },
+      "tray_2": {
+        "name": "Bac 2"
+      },
+      "tray_3": {
+        "name": "Bac 3"
+      },
+      "tray_4": {
+        "name": "Bac 4"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Afficher du texte",
+      "description": "Afficher du texte sur l'écran de l'imprimante (si pris en charge)",
+      "fields": {
+        "device_id": {
+          "name": "Appareil",
+          "description": "L'imprimante"
+        },
+        "text": {
+          "name": "Texte",
+          "description": "Texte à afficher sur l'imprimante"
+        }
+      }
+    }
+  }
+}

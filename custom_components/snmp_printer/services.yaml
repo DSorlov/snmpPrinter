@@ -1,0 +1,17 @@
+display_text:
+  name: Display Text
+  description: Display text on the printer's screen (if supported)
+  fields:
+    device_id:
+      name: Device
+      description: The printer device
+      required: true
+      selector:
+        device:
+          integration: snmp_printer
+    text:
+      name: Text
+      description: Text to display on the printer
+      required: true
+      selector:
+        text:

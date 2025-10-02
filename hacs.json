@@ -1,0 +1,8 @@
+{
+  "name": "SNMP Printer",
+  "content_in_root": false,
+  "render_readme": true,
+  "domains": ["sensor"],
+  "homeassistant": "2023.1.0",
+  "filename": "snmp_printer.zip"
+}
