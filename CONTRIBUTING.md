@@ -6,8 +6,8 @@ Thank you for your interest in contributing to the SNMP Printer integration!
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/dsorlov/snmpPrinter.git
-cd snmpPrinter
+git clone https://github.com/dsorlov/snmp_printer.git
+cd snmp_printer
 ```
 
 2. Install Home Assistant development environment (optional but recommended):
