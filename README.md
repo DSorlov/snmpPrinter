@@ -1,8 +1,11 @@
 ![maintained](https://img.shields.io/maintenance/yes/2025.svg)
 [![hacs_badge](https://img.shields.io/badge/hacs-default-green.svg)](https://github.com/custom-components/hacs)
-[![ha_version](https://img.shields.io/badge/home%20assistant-2025.08%2B-green.svg)](https://www.home-assistant.io)
+[![ha_version](https://img.shields.io/badge/home%20assistant-2024.10%2B-green.svg)](https://www.home-assistant.io)
 ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
-![stability-alpha](https://img.shields.io/badge/stability-stable-green.svg)
+![stability](https://img.shields.io/badge/stability-stable-green.svg)
+[![CI](https://github.com/DSorlov/snmpPrinter/workflows/CI/badge.svg)](https://github.com/DSorlov/snmpPrinter/actions/workflows/ci.yaml)
+[![hassfest](https://github.com/DSorlov/snmpPrinter/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/snmpPrinter/actions/workflows/hassfest.yaml)
+[![HACS](https://github.com/DSorlov/snmpPrinter/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/snmpPrinter/actions/workflows/hacs.yaml)
 [![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
