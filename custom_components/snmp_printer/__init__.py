@@ -1,4 +1,5 @@
 """The SNMP Printer integration."""
+
 from __future__ import annotations
 
 import asyncio
@@ -23,32 +24,36 @@ PLATFORMS: list[Platform] = [Platform.SENSOR]
 async def check_web_interface(host: str, hass: HomeAssistant) -> bool:
     """Check if the printer has a web interface available."""
     session = async_get_clientsession(hass)
-    
+
     # Try HTTP first
     try:
         async with asyncio.timeout(3):
             async with session.get(f"http://{host}", allow_redirects=True) as response:
-                if response.status < 500:  # Any response below 500 means web interface exists
+                if (
+                    response.status < 500
+                ):  # Any response below 500 means web interface exists
                     return True
     except Exception:
         pass
-    
+
     # Try HTTPS
     try:
         async with asyncio.timeout(3):
-            async with session.get(f"https://{host}", allow_redirects=True, ssl=False) as response:
+            async with session.get(
+                f"https://{host}", allow_redirects=True, ssl=False
+            ) as response:
                 if response.status < 500:
                     return True
     except Exception:
         pass
-    
+
     return False
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up SNMP Printer from a config entry."""
     hass.data.setdefault(DOMAIN, {})
-    
+
     # Create SNMP client
     snmp_client = SNMPClient(
         host=entry.data[CONF_HOST],
@@ -84,12 +89,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 "info": {**system_info, **device_info},
                 "status": device_info,
                 "cover_status": {"state": await snmp_client.get_cover_status()},
-                "page_count": device_info.get("page_counts", {"total": device_info.get("page_count")}),
+                "page_count": device_info.get(
+                    "page_counts", {"total": device_info.get("page_count")}
+                ),
                 "supplies": await snmp_client.get_supplies(),
                 "input_trays": await snmp_client.get_input_trays(),
                 "display_text": await snmp_client.get_display_text(),
                 "errors": await snmp_client.get_printer_errors(),
-                "web_interface_available": await check_web_interface(entry.data[CONF_HOST], hass),
+                "web_interface_available": await check_web_interface(
+                    entry.data[CONF_HOST], hass
+                ),
             }
             return data
         except Exception as err:

@@ -1,4 +1,5 @@
 """Support for SNMP Printer sensors."""
+
 from __future__ import annotations
 
 import logging
@@ -31,7 +32,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up SNMP Printer sensors based on a config entry."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
-    
+
     entities = []
 
     # Add main status sensor
@@ -85,7 +86,7 @@ class PrinterSensorBase(CoordinatorEntity, SensorEntity):
         # Extract manufacturer and model from description
         description = info.get("description", "")
         location = info.get("location", "")
-        
+
         # Try to get model name from description PID field
         model = "Unknown Printer"
         if "PID:" in description:
@@ -94,7 +95,7 @@ class PrinterSensorBase(CoordinatorEntity, SensorEntity):
                 model = parts[1].split(",")[0].split(";")[0].strip()
         elif location:
             model = location
-        
+
         # Extract manufacturer
         manufacturer = "Unknown"
         if "HP" in description or "Hewlett-Packard" in description:
@@ -111,17 +112,17 @@ class PrinterSensorBase(CoordinatorEntity, SensorEntity):
             manufacturer = "Samsung"
         elif "Xerox" in description:
             manufacturer = "Xerox"
-        
+
         # Use serial number or host as unique ID
         unique_id = info.get("serial_number", self._entry.data[CONF_HOST])
-        
+
         device_info = DeviceInfo(
             identifiers={(DOMAIN, unique_id)},
             name=model if model != "Unknown Printer" else self._entry.data[CONF_HOST],
             manufacturer=manufacturer,
             model=model,
         )
-        
+
         # Add configuration URL if web interface is available
         if data.get("web_interface_available"):
             device_info["configuration_url"] = f"http://{self._entry.data[CONF_HOST]}"
@@ -143,7 +144,9 @@ class PrinterStatusSensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._attr_translation_key = "status"
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_status"
         self._attr_icon = "mdi:printer"
 
@@ -152,7 +155,7 @@ class PrinterStatusSensor(PrinterSensorBase):
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return "unknown"
-        
+
         status = self.coordinator.data.get("status", {})
         return status.get("state", "unknown")
 
@@ -188,7 +191,9 @@ class PrinterCoverStatusSensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._attr_translation_key = "cover_status"
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_cover_status"
         self._attr_icon = "mdi:printer-3d-nozzle-alert"
 
@@ -208,7 +213,7 @@ class PrinterCoverStatusSensor(PrinterSensorBase):
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return "unknown"
-        
+
         cover_status = self.coordinator.data.get("cover_status", {})
         return cover_status.get("state", "unknown")
 
@@ -224,7 +229,9 @@ class PrinterPageCountSensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._attr_translation_key = "page_count"
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_page_count"
         self._attr_icon = "mdi:counter"
         self._attr_native_unit_of_measurement = "pages"
@@ -234,7 +241,7 @@ class PrinterPageCountSensor(PrinterSensorBase):
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return None
-        
+
         page_count = self.coordinator.data.get("page_count", {})
         return page_count.get("total")
 
@@ -243,16 +250,16 @@ class PrinterPageCountSensor(PrinterSensorBase):
         """Return the state attributes."""
         if not self.coordinator.data:
             return {}
-        
+
         page_count = self.coordinator.data.get("page_count", {})
         attrs = {}
-        
+
         if page_count.get("color") is not None:
             attrs["color_pages"] = page_count.get("color")
-        
+
         if page_count.get("black_and_white") is not None:
             attrs["black_and_white_pages"] = page_count.get("black_and_white")
-        
+
         return attrs
 
 
@@ -268,7 +275,7 @@ class PrinterSupplySensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._supply = supply
-        
+
         # Set translation key based on color (lowercase with underscores)
         color = supply.get("color", "")
         if color and color != "Unknown":
@@ -277,14 +284,26 @@ class PrinterSupplySensor(PrinterSensorBase):
         else:
             # Fallback to description for non-standard supplies
             self._attr_name = supply.get("description", "Supply")
-        
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_supply_{supply.get('index')}"
         self._attr_native_unit_of_measurement = PERCENTAGE
         self._attr_state_class = SensorStateClass.MEASUREMENT
-        
+
         # Set icon based on color - use droplets for all ink/toner
-        if color in ["Black", "Cyan", "Magenta", "Yellow", "Gray", "Grey", "Light Cyan", "Light Magenta", "Photo"]:
+        if color in [
+            "Black",
+            "Cyan",
+            "Magenta",
+            "Yellow",
+            "Gray",
+            "Grey",
+            "Light Cyan",
+            "Light Magenta",
+            "Photo",
+        ]:
             self._attr_icon = "mdi:water"
         else:
             # For unknown colors, check supply type
@@ -309,11 +328,11 @@ class PrinterSupplySensor(PrinterSensorBase):
         # Update supply data from coordinator
         if not self.coordinator.data or "supplies" not in self.coordinator.data:
             return None
-        
+
         for supply in self.coordinator.data["supplies"]:
             if supply.get("index") == self._supply.get("index"):
                 return supply.get("percentage")
-        
+
         return None
 
     @property
@@ -321,7 +340,7 @@ class PrinterSupplySensor(PrinterSensorBase):
         """Return the state attributes."""
         if not self.coordinator.data or "supplies" not in self.coordinator.data:
             return {}
-        
+
         for supply in self.coordinator.data["supplies"]:
             if supply.get("index") == self._supply.get("index"):
                 attributes = {
@@ -329,7 +348,7 @@ class PrinterSupplySensor(PrinterSensorBase):
                     "color": supply.get("color"),
                     "description": supply.get("description"),
                 }
-                
+
                 # Add RGB color code for UI customization
                 color = supply.get("color", "")
                 if color == "Black":
@@ -348,9 +367,9 @@ class PrinterSupplySensor(PrinterSensorBase):
                     attributes["rgb_color"] = [255, 128, 255]
                 elif color == "Photo":
                     attributes["rgb_color"] = [128, 128, 255]
-                
+
                 return attributes
-        
+
         return {}
 
 
@@ -366,22 +385,24 @@ class PrinterTraySensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._tray = tray
-        
+
         # Extract tray name from description (e.g., "Tray 1", "MP Tray")
         description = tray.get("description", "")
         tray_name = description if description else f"Tray {tray.get('index', '')}"
-        
+
         # Set translation key for standard trays (tray_1, tray_2, etc.)
         if "Tray" in tray_name and any(char.isdigit() for char in tray_name):
             # Extract number from tray name
-            tray_num = ''.join(filter(str.isdigit, tray_name))
+            tray_num = "".join(filter(str.isdigit, tray_name))
             if tray_num:
                 self._attr_translation_key = f"tray_{tray_num}"
         else:
             # For non-standard trays (e.g., "MP Tray"), use explicit name
             self._attr_name = tray_name
-        
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_tray_{tray.get('index')}"
         self._attr_native_unit_of_measurement = PERCENTAGE
         self._attr_icon = "mdi:tray"
@@ -400,11 +421,11 @@ class PrinterTraySensor(PrinterSensorBase):
         # Update tray data from coordinator
         if not self.coordinator.data or "input_trays" not in self.coordinator.data:
             return None
-        
+
         for tray in self.coordinator.data["input_trays"]:
             if tray.get("index") == self._tray.get("index"):
                 return tray.get("percentage")
-        
+
         return None
 
     @property
@@ -412,7 +433,7 @@ class PrinterTraySensor(PrinterSensorBase):
         """Return the state attributes."""
         if not self.coordinator.data or "input_trays" not in self.coordinator.data:
             return {}
-        
+
         for tray in self.coordinator.data["input_trays"]:
             if tray.get("index") == self._tray.get("index"):
                 return {
@@ -421,7 +442,7 @@ class PrinterTraySensor(PrinterSensorBase):
                     "max_capacity": tray.get("max_capacity"),
                     "current_level": tray.get("current_level"),
                 }
-        
+
         return {}
 
 
@@ -436,7 +457,9 @@ class PrinterErrorSensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._attr_translation_key = "errors"
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_errors"
         self._attr_icon = "mdi:alert"
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
@@ -446,7 +469,7 @@ class PrinterErrorSensor(PrinterSensorBase):
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return "none"
-        
+
         errors = self.coordinator.data.get("errors")
         return errors if errors else "none"
 
@@ -468,7 +491,9 @@ class PrinterDisplayTextSensor(PrinterSensorBase):
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
         self._attr_translation_key = "display"
-        unique_id = self.coordinator.data.get("info", {}).get("serial_number", entry.data[CONF_HOST])
+        unique_id = self.coordinator.data.get("info", {}).get(
+            "serial_number", entry.data[CONF_HOST]
+        )
         self._attr_unique_id = f"{unique_id}_display"
         self._attr_icon = "mdi:text-box"
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
@@ -478,7 +503,7 @@ class PrinterDisplayTextSensor(PrinterSensorBase):
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return "unknown"
-        
+
         display_text = self.coordinator.data.get("display_text")
         return display_text if display_text else "unknown"
 

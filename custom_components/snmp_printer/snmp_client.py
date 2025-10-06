@@ -1,4 +1,5 @@
 """SNMP client for printer communication."""
+
 from __future__ import annotations
 
 import logging
@@ -71,7 +72,7 @@ class SNMPClient:
         retries: int = 3,
     ):
         """Initialize the SNMP client.
-        
+
         Args:
             timeout: Timeout in seconds for each SNMP request (default 1.0)
             retries: Number of retries for failed requests (default 3)
@@ -133,7 +134,9 @@ class SNMPClient:
             )
         else:
             # SNMP v1 or v2c
-            return CommunityData(self.community, mpModel=0 if self.snmp_version == "1" else 1)
+            return CommunityData(
+                self.community, mpModel=0 if self.snmp_version == "1" else 1
+            )
 
     async def test_connection(self) -> bool:
         """Test the SNMP connection."""
@@ -177,7 +180,7 @@ class SNMPClient:
         await self._ensure_transport()
 
         results = {}
-        async for (errorIndication, errorStatus, errorIndex, varBinds) in bulk_walk_cmd(
+        async for errorIndication, errorStatus, errorIndex, varBinds in bulk_walk_cmd(
             self._engine,
             self._auth_data,
             self._transport,
@@ -202,7 +205,7 @@ class SNMPClient:
                     # Extract the index from the OID (last part after the base OID)
                     full_oid = str(varBind[0])
                     if full_oid.startswith(oid + "."):
-                        index = full_oid[len(oid) + 1:]
+                        index = full_oid[len(oid) + 1 :]
                         results[index] = str(varBind[1])
         return results
 
@@ -242,20 +245,22 @@ class SNMPClient:
         device_state = await self._get_oid(OID_DEVICE_STATE)
         serial = await self._get_oid(OID_SERIAL_NUMBER)
         mac = await self._get_oid(OID_HARDWARE_ADDRESS)
-        
+
         # Convert MAC address to standard format
         if mac:
             try:
                 mac_bytes = bytes.fromhex(mac.replace(" ", "").replace("0x", ""))
-                mac = ":" .join([f"{b:02x}" for b in mac_bytes])
+                mac = ":".join([f"{b:02x}" for b in mac_bytes])
             except Exception:
                 pass
-        
+
         # Get page counts
         page_counts = await self.get_page_counts()
 
         return {
-            "state": DEVICE_STATUS.get(int(device_state) if device_state else 1, "unknown"),
+            "state": DEVICE_STATUS.get(
+                int(device_state) if device_state else 1, "unknown"
+            ),
             "errors": await self._get_oid(OID_DEVICE_ERRORS),
             "serial_number": serial,
             "mac_address": mac,
@@ -278,7 +283,7 @@ class SNMPClient:
             supply_class = int(classes.get(index, 1))
             max_capacity = int(max_capacities.get(index, -2))
             level = int(levels.get(index, -2))
-            
+
             # Calculate percentage if capacity is known
             percentage = None
             if max_capacity > 0 and level >= 0:
@@ -287,21 +292,23 @@ class SNMPClient:
                 percentage = None
             elif level == -3:  # At least one supply is at some level
                 percentage = 50
-            
+
             # Extract color from description
             description = descriptions[index]
             color = "Unknown"
             description_lower = description.lower()
-            
+
             # Log the description for debugging color extraction
             _LOGGER.debug(
-                "Supply %s: description='%s', extracting color...",
-                index,
-                description
+                "Supply %s: description='%s', extracting color...", index, description
             )
-            
+
             # Check for common color names in description
-            if "black" in description_lower or "blk" in description_lower or "bk" in description_lower:
+            if (
+                "black" in description_lower
+                or "blk" in description_lower
+                or "bk" in description_lower
+            ):
                 color = "Black"
             elif "cyan" in description_lower:
                 color = "Cyan"
@@ -311,29 +318,30 @@ class SNMPClient:
                 color = "Yellow"
             elif "light cyan" in description_lower or "lightcyan" in description_lower:
                 color = "Light Cyan"
-            elif "light magenta" in description_lower or "lightmagenta" in description_lower:
+            elif (
+                "light magenta" in description_lower
+                or "lightmagenta" in description_lower
+            ):
                 color = "Light Magenta"
             elif "photo" in description_lower:
                 color = "Photo"
             elif "gray" in description_lower or "grey" in description_lower:
                 color = "Gray"
-            
-            _LOGGER.debug(
-                "Supply %s: extracted color='%s'",
-                index,
-                color
-            )
 
-            supplies.append({
-                "index": index,
-                "description": description,
-                "color": color,
-                "type": SUPPLY_TYPE.get(supply_type, "unknown"),
-                "class": SUPPLY_CLASS.get(supply_class, "unknown"),
-                "max_capacity": max_capacity,
-                "level": level,
-                "percentage": percentage,
-            })
+            _LOGGER.debug("Supply %s: extracted color='%s'", index, color)
+
+            supplies.append(
+                {
+                    "index": index,
+                    "description": description,
+                    "color": color,
+                    "type": SUPPLY_TYPE.get(supply_type, "unknown"),
+                    "class": SUPPLY_CLASS.get(supply_class, "unknown"),
+                    "max_capacity": max_capacity,
+                    "level": level,
+                    "percentage": percentage,
+                }
+            )
 
         return supplies
 
@@ -347,19 +355,21 @@ class SNMPClient:
         for index in descriptions.keys():
             max_capacity = int(max_capacities.get(index, -2))
             level = int(levels.get(index, -2))
-            
+
             # Calculate percentage
             percentage = None
             if max_capacity > 0 and level >= 0:
                 percentage = int((level / max_capacity) * 100)
 
-            trays.append({
-                "index": index,
-                "description": descriptions[index],
-                "max_capacity": max_capacity,
-                "level": level,
-                "percentage": percentage,
-            })
+            trays.append(
+                {
+                    "index": index,
+                    "description": descriptions[index],
+                    "max_capacity": max_capacity,
+                    "level": level,
+                    "percentage": percentage,
+                }
+            )
 
         return trays
 
@@ -383,17 +393,17 @@ class SNMPClient:
             text = await self._get_oid(f"{OID_DISPLAY_BUFFER}.1.1")
             if not text:
                 return None
-            
+
             # Decode hex string if it starts with 0x
             if isinstance(text, str) and text.startswith("0x"):
                 try:
                     # Remove 0x prefix and decode hex to bytes, then to UTF-8 string
                     hex_str = text[2:]
                     bytes_data = bytes.fromhex(hex_str)
-                    text = bytes_data.decode('utf-8', errors='ignore')
+                    text = bytes_data.decode("utf-8", errors="ignore")
                 except Exception:
                     pass  # Return as-is if decoding fails
-            
+
             return text if text else None
         except Exception:
             return None
@@ -408,25 +418,27 @@ class SNMPClient:
         # Walk the page count OID to get all marker impression counts
         # OID 1.3.6.1.2.1.43.10.2.1.4.1.x where x is the marker index
         page_counts = await self._walk_oid("1.3.6.1.2.1.43.10.2.1.4.1")
-        
+
         result = {
             "total": None,
             "color": None,
             "black_and_white": None,
         }
-        
+
         if not page_counts:
             return result
-        
+
         # Process all page counts
         # Index 1 is usually total pages
         # Subsequent indices may be black/color depending on printer
-        counts = [int(count) for count in page_counts.values() if count and count.isdigit()]
-        
+        counts = [
+            int(count) for count in page_counts.values() if count and count.isdigit()
+        ]
+
         if len(counts) > 0:
             # First value is typically total pages
             result["total"] = counts[0]
-        
+
         if len(counts) == 3:
             # Some printers report: total, color, BW
             result["color"] = counts[1]
@@ -437,7 +449,7 @@ class SNMPClient:
             result["black_and_white"] = counts[1]
             if result["total"] is None:
                 result["total"] = result["color"] + result["black_and_white"]
-        
+
         return result
 
     async def get_all_data(self) -> dict[str, Any]:
@@ -463,7 +475,7 @@ class SNMPClient:
 
         # Try to extract manufacturer from description
         from .const import PRINTER_MANUFACTURERS
-        
+
         description_lower = description.lower()
         for manufacturer in PRINTER_MANUFACTURERS:
             if manufacturer.lower() in description_lower:

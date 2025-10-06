@@ -1,4 +1,5 @@
 """Constants for the SNMP Printer integration."""
+
 from typing import Final
 
 DOMAIN: Final = "snmp_printer"

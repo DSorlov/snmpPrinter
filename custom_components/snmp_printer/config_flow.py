@@ -35,7 +35,9 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for SNMP Printer."""
 
     VERSION = 1
-    _discovered_hosts: set[str] = set()  # Class variable for cross-instance deduplication
+    _discovered_hosts: set[str] = (
+        set()
+    )  # Class variable for cross-instance deduplication
 
     def __init__(self):
         """Initialize the config flow."""
@@ -71,10 +73,10 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # Get printer info to verify connection
                 system_info = await client.get_system_info()
                 device_info = await client.get_device_info()
-                
+
                 # Use serial number as unique ID, fallback to host
                 unique_id = device_info.get("serial_number", user_input[CONF_HOST])
-                
+
                 await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
 
@@ -82,7 +84,7 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 description = system_info.get("description") or ""
                 location = system_info.get("location") or ""
                 name = system_info.get("name") or ""
-                
+
                 # Try to get model name from description PID field
                 model_name = None
                 if description and "PID:" in description:
@@ -93,7 +95,7 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     model_name = location
                 elif name:
                     model_name = name
-                
+
                 # Create entry with printer model as title
                 title = model_name or user_input[CONF_HOST]
 
@@ -103,7 +105,9 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         CONF_HOST: user_input[CONF_HOST],
                         CONF_PORT: user_input.get(CONF_PORT, DEFAULT_PORT),
                         CONF_SNMP_VERSION: user_input.get(CONF_SNMP_VERSION, "2c"),
-                        CONF_COMMUNITY: user_input.get(CONF_COMMUNITY, DEFAULT_COMMUNITY),
+                        CONF_COMMUNITY: user_input.get(
+                            CONF_COMMUNITY, DEFAULT_COMMUNITY
+                        ),
                         CONF_USERNAME: user_input.get(CONF_USERNAME),
                         CONF_AUTH_PROTOCOL: user_input.get(CONF_AUTH_PROTOCOL),
                         CONF_AUTH_KEY: user_input.get(CONF_AUTH_KEY),
@@ -121,22 +125,60 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Determine SNMP version (from user_input or default)
         snmp_version = user_input.get(CONF_SNMP_VERSION, "2c") if user_input else "2c"
-        
+
         # Build schema based on SNMP version
         if snmp_version == "3":
             # SNMPv3 - show username and authentication options
             data_schema = vol.Schema(
                 {
-                    vol.Required(CONF_HOST, default=user_input.get(CONF_HOST, "") if user_input else ""): str,
-                    vol.Optional(CONF_PORT, default=user_input.get(CONF_PORT, DEFAULT_PORT) if user_input else DEFAULT_PORT): int,
-                    vol.Required(CONF_SNMP_VERSION, default="3"): vol.In(["1", "2c", "3"]),
-                    vol.Required(CONF_USERNAME, default=user_input.get(CONF_USERNAME, "") if user_input else ""): str,
-                    vol.Optional(CONF_AUTH_PROTOCOL, default=user_input.get(CONF_AUTH_PROTOCOL) if user_input else None): vol.In(["MD5", "SHA", "SHA224", "SHA256", "SHA384", "SHA512"]),
-                    vol.Optional(CONF_AUTH_KEY, default=user_input.get(CONF_AUTH_KEY, "") if user_input else ""): str,
-                    vol.Optional(CONF_PRIV_PROTOCOL, default=user_input.get(CONF_PRIV_PROTOCOL) if user_input else None): vol.In(["DES", "3DES", "AES", "AES192", "AES256"]),
-                    vol.Optional(CONF_PRIV_KEY, default=user_input.get(CONF_PRIV_KEY, "") if user_input else ""): str,
+                    vol.Required(
+                        CONF_HOST,
+                        default=user_input.get(CONF_HOST, "") if user_input else "",
+                    ): str,
                     vol.Optional(
-                        CONF_UPDATE_INTERVAL, default=user_input.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL) if user_input else DEFAULT_UPDATE_INTERVAL
+                        CONF_PORT,
+                        default=(
+                            user_input.get(CONF_PORT, DEFAULT_PORT)
+                            if user_input
+                            else DEFAULT_PORT
+                        ),
+                    ): int,
+                    vol.Required(CONF_SNMP_VERSION, default="3"): vol.In(
+                        ["1", "2c", "3"]
+                    ),
+                    vol.Required(
+                        CONF_USERNAME,
+                        default=user_input.get(CONF_USERNAME, "") if user_input else "",
+                    ): str,
+                    vol.Optional(
+                        CONF_AUTH_PROTOCOL,
+                        default=(
+                            user_input.get(CONF_AUTH_PROTOCOL) if user_input else None
+                        ),
+                    ): vol.In(["MD5", "SHA", "SHA224", "SHA256", "SHA384", "SHA512"]),
+                    vol.Optional(
+                        CONF_AUTH_KEY,
+                        default=user_input.get(CONF_AUTH_KEY, "") if user_input else "",
+                    ): str,
+                    vol.Optional(
+                        CONF_PRIV_PROTOCOL,
+                        default=(
+                            user_input.get(CONF_PRIV_PROTOCOL) if user_input else None
+                        ),
+                    ): vol.In(["DES", "3DES", "AES", "AES192", "AES256"]),
+                    vol.Optional(
+                        CONF_PRIV_KEY,
+                        default=user_input.get(CONF_PRIV_KEY, "") if user_input else "",
+                    ): str,
+                    vol.Optional(
+                        CONF_UPDATE_INTERVAL,
+                        default=(
+                            user_input.get(
+                                CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL
+                            )
+                            if user_input
+                            else DEFAULT_UPDATE_INTERVAL
+                        ),
                     ): int,
                 }
             )
@@ -144,12 +186,38 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # SNMPv1/v2c - show community string
             data_schema = vol.Schema(
                 {
-                    vol.Required(CONF_HOST, default=user_input.get(CONF_HOST, "") if user_input else ""): str,
-                    vol.Optional(CONF_PORT, default=user_input.get(CONF_PORT, DEFAULT_PORT) if user_input else DEFAULT_PORT): int,
-                    vol.Optional(CONF_SNMP_VERSION, default=snmp_version): vol.In(["1", "2c", "3"]),
-                    vol.Optional(CONF_COMMUNITY, default=user_input.get(CONF_COMMUNITY, DEFAULT_COMMUNITY) if user_input else DEFAULT_COMMUNITY): str,
+                    vol.Required(
+                        CONF_HOST,
+                        default=user_input.get(CONF_HOST, "") if user_input else "",
+                    ): str,
                     vol.Optional(
-                        CONF_UPDATE_INTERVAL, default=user_input.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL) if user_input else DEFAULT_UPDATE_INTERVAL
+                        CONF_PORT,
+                        default=(
+                            user_input.get(CONF_PORT, DEFAULT_PORT)
+                            if user_input
+                            else DEFAULT_PORT
+                        ),
+                    ): int,
+                    vol.Optional(CONF_SNMP_VERSION, default=snmp_version): vol.In(
+                        ["1", "2c", "3"]
+                    ),
+                    vol.Optional(
+                        CONF_COMMUNITY,
+                        default=(
+                            user_input.get(CONF_COMMUNITY, DEFAULT_COMMUNITY)
+                            if user_input
+                            else DEFAULT_COMMUNITY
+                        ),
+                    ): str,
+                    vol.Optional(
+                        CONF_UPDATE_INTERVAL,
+                        default=(
+                            user_input.get(
+                                CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL
+                            )
+                            if user_input
+                            else DEFAULT_UPDATE_INTERVAL
+                        ),
                     ): int,
                 }
             )
@@ -166,15 +234,17 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle zeroconf discovery."""
         # Extract host from discovery info
         host = discovery_info.host
-        
+
         if not host:
             return self.async_abort(reason="unknown")
-        
+
         # Check if we already processed this IP in this session (class variable)
         if host in SNMPPrinterConfigFlow._discovered_hosts:
-            _LOGGER.debug("Already processed discovery for %s, skipping duplicate", host)
+            _LOGGER.debug(
+                "Already processed discovery for %s, skipping duplicate", host
+            )
             return self.async_abort(reason="already_in_progress")
-        
+
         # Mark this IP as being processed (class variable)
         SNMPPrinterConfigFlow._discovered_hosts.add(host)
 
@@ -183,61 +253,82 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         system_info = None
         device_info = None
         working_version = None
-        
+
         for snmp_version in ["2c", "1"]:
             try:
-                _LOGGER.info("Trying to connect to %s using SNMP v%s", host, snmp_version)
+                _LOGGER.info(
+                    "Trying to connect to %s using SNMP v%s", host, snmp_version
+                )
                 client = SNMPClient(
                     host=host,
                     port=DEFAULT_PORT,
                     snmp_version=snmp_version,
                     community=DEFAULT_COMMUNITY,
                     timeout=2.5,  # 2.5 seconds per request
-                    retries=1,     # 1 retry = total ~5 seconds max per version
+                    retries=1,  # 1 retry = total ~5 seconds max per version
                 )
                 system_info = await client.get_system_info()
                 device_info = await client.get_device_info()
-                
+
                 # Check if we actually got useful data (not all None)
                 has_data = (
-                    system_info.get("description") or 
-                    system_info.get("name") or 
-                    device_info.get("serial_number") or
-                    device_info.get("mac_address")
+                    system_info.get("description")
+                    or system_info.get("name")
+                    or device_info.get("serial_number")
+                    or device_info.get("mac_address")
                 )
-                
+
                 if has_data:
                     working_version = snmp_version
-                    _LOGGER.info("Successfully connected to %s using SNMP v%s", host, snmp_version)
+                    _LOGGER.info(
+                        "Successfully connected to %s using SNMP v%s",
+                        host,
+                        snmp_version,
+                    )
                     break  # Success, exit the loop
                 else:
-                    _LOGGER.warning("SNMP v%s connected to %s but returned no data, trying next version", snmp_version, host)
+                    _LOGGER.warning(
+                        "SNMP v%s connected to %s but returned no data, trying next version",
+                        snmp_version,
+                        host,
+                    )
                     system_info = None
                     device_info = None
                     continue
-                    
+
             except Exception as err:  # pylint: disable=broad-except
-                _LOGGER.warning("Could not connect to %s using SNMP v%s: %s", host, snmp_version, err)
+                _LOGGER.warning(
+                    "Could not connect to %s using SNMP v%s: %s",
+                    host,
+                    snmp_version,
+                    err,
+                )
                 import traceback
+
                 _LOGGER.debug("Traceback: %s", traceback.format_exc())
                 continue  # Try next version
-        
+
         # If we couldn't connect with either version, abort
         if system_info is None or device_info is None:
-            _LOGGER.warning("Could not connect to discovered device at %s with any SNMP version", host)
-            SNMPPrinterConfigFlow._discovered_hosts.discard(host)  # Remove from set so it can be retried
+            _LOGGER.warning(
+                "Could not connect to discovered device at %s with any SNMP version",
+                host,
+            )
+            SNMPPrinterConfigFlow._discovered_hosts.discard(
+                host
+            )  # Remove from set so it can be retried
             return self.async_abort(reason="not_printer")
-        
+
         try:
             # Log what we got from SNMP
             _LOGGER.debug("System info from %s: %s", host, system_info)
             _LOGGER.debug("Device info from %s: %s", host, device_info)
-            
+
             # Extract manufacturer and model from description (same logic as sensor.py)
             description = system_info.get("description") or ""
             location = system_info.get("location") or ""
             name = system_info.get("name") or ""
-            
+
             # Try to get model name from description PID field
             model = "Unknown Printer"
             if description and "PID:" in description:
@@ -248,7 +339,7 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 model = location
             elif name:
                 model = name
-            
+
             # Extract manufacturer
             manufacturer = "Unknown"
             if description:
@@ -266,21 +357,27 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     manufacturer = "Samsung"
                 elif "Xerox" in description:
                     manufacturer = "Xerox"
-            
+
             # Get serial number for unique ID
             unique_id = device_info.get("serial_number")
-            
+
             if not unique_id:
                 # If no serial number, use MAC address or host as fallback
                 unique_id = device_info.get("mac_address", host)
-            
+
             # Set unique ID based on serial number to prevent duplicate discoveries
             await self.async_set_unique_id(unique_id)
             # Update the host if IP changed, but don't abort - let user see it
             self._abort_if_unique_id_configured(updates={CONF_HOST: host})
 
-            _LOGGER.info("Discovered printer: %s %s at %s (unique_id: %s)", manufacturer, model, host, unique_id)
-            
+            _LOGGER.info(
+                "Discovered printer: %s %s at %s (unique_id: %s)",
+                manufacturer,
+                model,
+                host,
+                unique_id,
+            )
+
             # Set the title in the context so it appears in the discovery card
             self.context["title_placeholders"] = {
                 "name": model,
@@ -303,8 +400,11 @@ class SNMPPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         except Exception as err:  # pylint: disable=broad-except
             _LOGGER.error("Error processing discovered device at %s: %s", host, err)
             import traceback
+
             _LOGGER.debug("Traceback: %s", traceback.format_exc())
-            SNMPPrinterConfigFlow._discovered_hosts.discard(host)  # Remove from set so it can be retried
+            SNMPPrinterConfigFlow._discovered_hosts.discard(
+                host
+            )  # Remove from set so it can be retried
             return self.async_abort(reason="not_printer")
 
     async def async_step_zeroconf_confirm(
@@ -359,11 +459,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             # Store the connection settings
             self._data.update(user_input)
-            
+
             # If SNMP version changed to v3, go to auth step
             if user_input.get(CONF_SNMP_VERSION) == "3":
                 return await self.async_step_auth()
-            
+
             # Otherwise, go to final step to test and save
             return await self.async_step_complete()
 
@@ -384,7 +484,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 ): vol.In(["1", "2c", "3"]),
                 vol.Optional(
                     CONF_COMMUNITY,
-                    default=self.config_entry.data.get(CONF_COMMUNITY, DEFAULT_COMMUNITY),
+                    default=self.config_entry.data.get(
+                        CONF_COMMUNITY, DEFAULT_COMMUNITY
+                    ),
                 ): str,
                 vol.Optional(
                     CONF_UPDATE_INTERVAL,
@@ -452,17 +554,25 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build full config from stored data
         snmp_version = self._data.get(CONF_SNMP_VERSION)
-        
+
         # Create client with new settings
         client = SNMPClient(
             host=self._data.get(CONF_HOST),
             port=self._data.get(CONF_PORT, DEFAULT_PORT),
             snmp_version=snmp_version,
-            community=self._data.get(CONF_COMMUNITY, DEFAULT_COMMUNITY) if snmp_version != "3" else None,
+            community=(
+                self._data.get(CONF_COMMUNITY, DEFAULT_COMMUNITY)
+                if snmp_version != "3"
+                else None
+            ),
             username=self._data.get(CONF_USERNAME) if snmp_version == "3" else None,
-            auth_protocol=self._data.get(CONF_AUTH_PROTOCOL) if snmp_version == "3" else None,
+            auth_protocol=(
+                self._data.get(CONF_AUTH_PROTOCOL) if snmp_version == "3" else None
+            ),
             auth_key=self._data.get(CONF_AUTH_KEY) if snmp_version == "3" else None,
-            priv_protocol=self._data.get(CONF_PRIV_PROTOCOL) if snmp_version == "3" else None,
+            priv_protocol=(
+                self._data.get(CONF_PRIV_PROTOCOL) if snmp_version == "3" else None
+            ),
             priv_key=self._data.get(CONF_PRIV_KEY) if snmp_version == "3" else None,
         )
 
@@ -475,14 +585,14 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 self.config_entry,
                 data=self._data,
             )
-            
+
             # Also store in options for consistency
             return self.async_create_entry(title="", data=self._data)
 
         except Exception:  # pylint: disable=broad-except
             _LOGGER.exception("Error connecting to printer with new settings")
             errors["base"] = "cannot_connect"
-            
+
             # Go back to init step
             self._data = {}
             return await self.async_step_init(user_input={})
