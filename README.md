@@ -3,9 +3,9 @@
 [![ha_version](https://img.shields.io/badge/home%20assistant-2024.10%2B-green.svg)](https://www.home-assistant.io)
 ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
 ![stability](https://img.shields.io/badge/stability-stable-green.svg)
-[![CI](https://github.com/DSorlov/snmpPrinter/workflows/CI/badge.svg)](https://github.com/DSorlov/snmpPrinter/actions/workflows/ci.yaml)
-[![hassfest](https://github.com/DSorlov/snmpPrinter/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/snmpPrinter/actions/workflows/hassfest.yaml)
-[![HACS](https://github.com/DSorlov/snmpPrinter/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/snmpPrinter/actions/workflows/hacs.yaml)
+[![CI](https://github.com/DSorlov/snmp_printer/workflows/CI/badge.svg)](https://github.com/DSorlov/snmp_printer/actions/workflows/ci.yaml)
+[![hassfest](https://github.com/DSorlov/snmp_printer/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/snmp_printer/actions/workflows/hassfest.yaml)
+[![HACS](https://github.com/DSorlov/snmp_printer/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/snmp_printer/actions/workflows/hacs.yaml)
 [![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -47,8 +47,8 @@ For each configured printer, the integration creates:
 
 ### Manual Installation
 
-1. Download the latest release from [GitHub](https://github.com/dsorlov/snmpPrinter/releases)
-2. Extract the `custom_components/snmpPrinter` folder to your Home Assistant's `custom_components` directory
+1. Download the latest release from [GitHub](https://github.com/dsorlov/snmp_printer/releases)
+2. Extract the `custom_components/snmp_printer` folder to your Home Assistant's `custom_components` directory
 3. Restart Home Assistant
 
 ## Configuration
@@ -184,9 +184,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- :bug: [Report a Bug](https://github.com/dsorlov/snmpPrinter/issues)
-- :bulb: [Request a Feature](https://github.com/dsorlov/snmpPrinter/issues)
-- :book: [Documentation](https://github.com/dsorlov/snmpPrinter)
+- :bug: [Report a Bug](https://github.com/dsorlov/snmp_printer/issues)
+- :bulb: [Request a Feature](https://github.com/dsorlov/snmp_printer/issues)
+- :book: [Documentation](https://github.com/dsorlov/snmp_printer)
 
 ## Changelog
 

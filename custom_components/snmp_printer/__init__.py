@@ -98,7 +98,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
-        name=f"snmpPrinter_{entry.data[CONF_HOST]}",
+        name=f"snmp_printer_{entry.data[CONF_HOST]}",
         update_method=async_update_data,
         update_interval=timedelta(seconds=update_interval),
     )

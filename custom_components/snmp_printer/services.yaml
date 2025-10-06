@@ -8,7 +8,7 @@ display_text:
       required: true
       selector:
         device:
-          integration: snmpPrinter
+          integration: snmp_printer
     text:
       name: Text
       description: Text to display on the printer

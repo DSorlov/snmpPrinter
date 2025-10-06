@@ -13,7 +13,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Check out repository
-        uses: "actions/checkout@v5"
+        uses: "actions/checkout@v4"
         
       - name: HACS validation
         uses: "hacs/action@main"
@@ -26,10 +26,10 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Check out repository
-        uses: "actions/checkout@v5"
+        uses: "actions/checkout@v4"
         
       - name: Set up Python
-        uses: "actions/setup-python@v6"
+        uses: "actions/setup-python@v4"
         with:
           python-version: "3.11"
           
@@ -40,7 +40,7 @@ jobs:
           
       - name: Validate Python syntax
         run: |
-          python -m py_compile custom_components/snmpPrinter/*.py
+          python -m py_compile custom_components/snmp_printer/*.py
           
       - name: Check manifest.json
         run: |
@@ -48,7 +48,7 @@ jobs:
           import json
           import os
           
-          manifest_path = 'custom_components/snmpPrinter/manifest.json'
+          manifest_path = 'custom_components/snmp_printer/manifest.json'
           
           if not os.path.exists(manifest_path):
               print('manifest.json not found')

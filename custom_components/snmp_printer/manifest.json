@@ -1,12 +1,12 @@
 {
-  "domain": "snmpPrinter",
+  "domain": "snmp_printer",
   "name": "SNMP Printer",
   "codeowners": ["@dsorlov"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/dsorlov/snmpPrinter",
+  "documentation": "https://github.com/dsorlov/snmp_printer",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/dsorlov/snmpPrinter/issues",
+  "issue_tracker": "https://github.com/dsorlov/snmp_printer/issues",
   "requirements": ["pysnmp==7.1.21"],
   "version": "1.0.0",
   "zeroconf": [

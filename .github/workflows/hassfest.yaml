@@ -13,7 +13,7 @@ jobs:
     name: Validate integration
     steps:
       - name: Check out repository
-        uses: "actions/checkout@v5"
+        uses: "actions/checkout@v4"
       
       - name: Validate with hassfest
         uses: "home-assistant/actions/hassfest@master"
@@ -31,7 +31,7 @@ jobs:
           import json
           import os
           
-          translations_dir = 'custom_components/snmpPrinter/translations'
+          translations_dir = 'custom_components/snmp_printer/translations'
           en_file = os.path.join(translations_dir, 'en.json')
           
           if not os.path.exists(en_file):
