@@ -20,6 +20,11 @@ DEFAULT_COMMUNITY: Final = "public"
 DEFAULT_UPDATE_INTERVAL: Final = 60
 DEFAULT_SNMP_VERSION: Final = "2c"
 
+# Error logging configuration
+DEFAULT_ERROR_LOG_INTERVAL: Final = (
+    300  # Log offline errors at most once every 5 minutes
+)
+
 # SNMP OIDs based on RFC 3805 (Printer MIB) and RFC 1213 (MIB-II)
 # System information
 OID_SYSTEM_DESCRIPTION: Final = "1.3.6.1.2.1.1.1.0"

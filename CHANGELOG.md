@@ -8,9 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2025-10-14
 
 ### Added
-- Cached values feature: Integration now remembers last known sensor values when printer is offline
+- Cached values feature: Integration now remembers last known sensor values when printer is offline (Issue #3)
 - Offline status indication in sensor attributes with timestamp of last successful data fetch
 - Status sensor now shows "offline" state when using cached data
+
+### Fixed
+- Reduced excessive SNMP error logging when printer is offline (Issue #6)
+- SNMP errors now log once as ERROR, then at WARNING level every 5 minutes to prevent log spam
+- Connection recovery is properly logged when printer comes back online
 
 ## [1.0.0] - 2025-10-01
 

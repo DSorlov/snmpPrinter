@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from typing import Any
 
 from pysnmp.hlapi.v3arch.asyncio import (
@@ -25,8 +26,11 @@ from pysnmp.hlapi.v3arch.asyncio import (
 from pysnmp.proto.rfc1902 import OctetString
 
 from .const import (
+    DEFAULT_ERROR_LOG_INTERVAL,
     DEVICE_STATUS,
+    OID_COVER_DESCRIPTION,
     OID_COVER_STATUS,
+    OID_DEVICE_DESCRIPTION,
     OID_DEVICE_ERRORS,
     OID_DEVICE_STATE,
     OID_DISPLAY_BUFFER,
@@ -41,6 +45,8 @@ from .const import (
     OID_MARKER_SUPPLIES_TYPE,
     OID_MEMORY_SIZE,
     OID_PAGE_COUNT,
+    OID_PRINTER_ERRORS,
+    OID_PRINTER_STATUS,
     OID_SERIAL_NUMBER,
     OID_SYSTEM_CONTACT,
     OID_SYSTEM_DESCRIPTION,
@@ -93,11 +99,72 @@ class SNMPClient:
         self._transport = None  # Will be created async
         self._auth_data = self._get_auth_data()
 
+        # Connection state tracking for better error logging
+        self._connection_state = "unknown"  # unknown, online, offline
+        self._last_error_log_time = 0
+        self._consecutive_failures = 0
+
     def _create_engine(self):
         """Create SNMP engine (blocking operation)."""
         if self._engine is None:
             self._engine = SnmpEngine()
         return self._engine
+
+    def _handle_snmp_error(self, error_message: str) -> None:
+        """Handle SNMP errors with intelligent logging to reduce spam."""
+        current_time = time.time()
+        self._consecutive_failures += 1
+
+        # Determine if we should log this error
+        should_log_error = False
+        log_level = logging.ERROR
+
+        if self._connection_state == "unknown" or self._connection_state == "online":
+            # First error or was previously online - log as error
+            should_log_error = True
+            self._connection_state = "offline"
+            self._last_error_log_time = current_time
+        elif self._connection_state == "offline":
+            # Already offline - check if enough time has passed for another log
+            time_since_last_log = current_time - self._last_error_log_time
+            if time_since_last_log >= DEFAULT_ERROR_LOG_INTERVAL:
+                should_log_error = True
+                log_level = logging.WARNING  # Reduce severity for ongoing issues
+                self._last_error_log_time = current_time
+
+        if should_log_error:
+            if self._consecutive_failures == 1:
+                _LOGGER.error(
+                    "Printer %s: %s (switching to cached data if available)",
+                    self.host,
+                    error_message,
+                )
+            else:
+                _LOGGER.warning(
+                    "Printer %s still offline: %s (attempt %d, using cached data)",
+                    self.host,
+                    error_message,
+                    self._consecutive_failures,
+                )
+        else:
+            # Still log at debug level for troubleshooting
+            _LOGGER.debug(
+                "Printer %s offline: %s (suppressed, attempt %d)",
+                self.host,
+                error_message,
+                self._consecutive_failures,
+            )
+
+    def _mark_connection_success(self) -> None:
+        """Mark a successful connection to reset error tracking."""
+        if self._connection_state == "offline":
+            _LOGGER.info(
+                "Printer %s is back online after %d failed attempts",
+                self.host,
+                self._consecutive_failures,
+            )
+        self._connection_state = "online"
+        self._consecutive_failures = 0
 
     async def _ensure_transport(self):
         """Ensure transport and engine are created (async operation)."""
@@ -160,17 +227,16 @@ class SNMPClient:
         )
 
         if errorIndication:
-            _LOGGER.debug("SNMP error: %s", errorIndication)
+            self._handle_snmp_error(f"SNMP error: {errorIndication}")
             return None
         elif errorStatus:
-            _LOGGER.debug(
-                "SNMP error: %s at %s",
-                errorStatus.prettyPrint(),
-                errorIndex and varBinds[int(errorIndex) - 1][0] or "?",
+            self._handle_snmp_error(
+                f"SNMP error: {errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or '?'}"
             )
             return None
 
         for varBind in varBinds:
+            self._mark_connection_success()
             return varBind[1].prettyPrint()
 
         return None
@@ -191,16 +257,18 @@ class SNMPClient:
             lexicographicMode=False,
         ):
             if errorIndication:
-                _LOGGER.error("SNMP walk error: %s", errorIndication)
+                self._handle_snmp_error(f"SNMP walk error: {errorIndication}")
                 break
             elif errorStatus:
-                _LOGGER.error(
-                    "SNMP walk error: %s at %s",
-                    errorStatus.prettyPrint(),
-                    errorIndex and varBinds[int(errorIndex) - 1][0] or "?",
+                self._handle_snmp_error(
+                    f"SNMP walk error: {errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or '?'}"
                 )
                 break
             else:
+                # Mark success if we get any data
+                if not results and varBinds:
+                    self._mark_connection_success()
+
                 for varBind in varBinds:
                     # Extract the index from the OID (last part after the base OID)
                     full_oid = str(varBind[0])
