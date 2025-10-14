@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "idle": "Inaktiv",
+          "printing": "Udskriver",
+          "warming_up": "Varmer op",
+          "offline": "Offline (cachede data)",
+          "unknown": "Ukendt"
+        }
       },
       "page_count": {
         "name": "Sidetæller"

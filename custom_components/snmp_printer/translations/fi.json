@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "Tila"
+        "name": "Tila",
+        "state": {
+          "idle": "Käyttämätön",
+          "printing": "Tulostaa",
+          "warming_up": "Lämpenee",
+          "offline": "Offline (välimuistissa olevat tiedot)",
+          "unknown": "Tuntematon"
+        }
       },
       "page_count": {
         "name": "Sivulaskuri"

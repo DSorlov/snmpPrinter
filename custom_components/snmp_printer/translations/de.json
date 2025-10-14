@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "idle": "Bereit",
+          "printing": "Druckt",
+          "warming_up": "Aufwärmen",
+          "offline": "Offline (zwischengespeicherte Daten)",
+          "unknown": "Unbekannt"
+        }
       },
       "page_count": {
         "name": "Seitenzähler"

@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "État"
+        "name": "État",
+        "state": {
+          "idle": "Inactif",
+          "printing": "Impression",
+          "warming_up": "Préchauffage",
+          "offline": "Hors ligne (données mises en cache)",
+          "unknown": "Inconnu"
+        }
       },
       "page_count": {
         "name": "Compteur de pages"

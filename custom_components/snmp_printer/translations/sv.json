@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "idle": "Inaktiv",
+          "printing": "Skriver ut",
+          "warming_up": "Värmer upp",
+          "offline": "Offline (cachad data)",
+          "unknown": "Okänd"
+        }
       },
       "page_count": {
         "name": "Sidräknare"

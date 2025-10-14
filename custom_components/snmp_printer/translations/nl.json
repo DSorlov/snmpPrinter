@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "idle": "Inactief",
+          "printing": "Afdrukken",
+          "warming_up": "Opwarmen",
+          "offline": "Offline (gecachte gegevens)",
+          "unknown": "Onbekend"
+        }
       },
       "page_count": {
         "name": "Paginateller"
