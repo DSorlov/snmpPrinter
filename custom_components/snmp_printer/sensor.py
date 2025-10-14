@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import datetime
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -77,6 +78,19 @@ class PrinterSensorBase(CoordinatorEntity, SensorEntity):
         self._attr_has_entity_name = True
 
     @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        # Entity is available if we have data (either live or cached)
+        return self.coordinator.data is not None
+
+    @property
+    def is_printer_online(self) -> bool:
+        """Check if printer is currently online."""
+        if not self.coordinator.data:
+            return False
+        return self.coordinator.data.get("is_online", True)
+
+    @property
     def device_info(self) -> DeviceInfo:
         """Return device information."""
         data = self.coordinator.data
@@ -149,12 +163,17 @@ class PrinterStatusSensor(PrinterSensorBase):
         )
         self._attr_unique_id = f"{unique_id}_status"
         self._attr_icon = "mdi:printer"
+        self._attr_options = ["idle", "printing", "warming_up", "offline", "unknown"]
 
     @property
     def native_value(self) -> str:
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return "unknown"
+
+        # If printer is offline, return offline status
+        if not self.is_printer_online:
+            return "offline"
 
         status = self.coordinator.data.get("status", {})
         return status.get("state", "unknown")
@@ -175,6 +194,13 @@ class PrinterStatusSensor(PrinterSensorBase):
             "serial_number": info.get("serial_number"),
             "description": info.get("description"),
         }
+
+        # Add offline information if using cached data
+        if not self.is_printer_online:
+            attributes["using_cached_data"] = True
+            offline_since = self.coordinator.data.get("offline_since")
+            if offline_since:
+                attributes["offline_since"] = offline_since
 
         # Remove None values
         return {k: v for k, v in attributes.items() if v is not None}
@@ -259,6 +285,13 @@ class PrinterPageCountSensor(PrinterSensorBase):
 
         if page_count.get("black_and_white") is not None:
             attrs["black_and_white_pages"] = page_count.get("black_and_white")
+
+        # Add offline information if using cached data
+        if not self.is_printer_online:
+            attrs["using_cached_data"] = True
+            offline_since = self.coordinator.data.get("offline_since")
+            if offline_since:
+                attrs["last_updated"] = offline_since
 
         return attrs
 
@@ -349,6 +382,13 @@ class PrinterSupplySensor(PrinterSensorBase):
                     "description": supply.get("description"),
                 }
 
+                # Add offline information if using cached data
+                if not self.is_printer_online:
+                    attributes["using_cached_data"] = True
+                    offline_since = self.coordinator.data.get("offline_since")
+                    if offline_since:
+                        attributes["last_updated"] = offline_since
+
                 # Add RGB color code for UI customization
                 color = supply.get("color", "")
                 if color == "Black":
@@ -436,12 +476,21 @@ class PrinterTraySensor(PrinterSensorBase):
 
         for tray in self.coordinator.data["input_trays"]:
             if tray.get("index") == self._tray.get("index"):
-                return {
+                attributes = {
                     "status": tray.get("status"),
                     "media_name": tray.get("media_name"),
                     "max_capacity": tray.get("max_capacity"),
                     "current_level": tray.get("current_level"),
                 }
+
+                # Add offline information if using cached data
+                if not self.is_printer_online:
+                    attributes["using_cached_data"] = True
+                    offline_since = self.coordinator.data.get("offline_since")
+                    if offline_since:
+                        attributes["last_updated"] = offline_since
+
+                return attributes
 
         return {}
 

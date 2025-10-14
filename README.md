@@ -1,7 +1,7 @@
 ![maintained](https://img.shields.io/maintenance/yes/2025.svg)
 [![hacs_badge](https://img.shields.io/badge/hacs-default-green.svg)](https://github.com/custom-components/hacs)
 [![ha_version](https://img.shields.io/badge/home%20assistant-2024.10%2B-green.svg)](https://www.home-assistant.io)
-![version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![version](https://img.shields.io/badge/version-1.1.0-green.svg)
 ![stability](https://img.shields.io/badge/stability-stable-green.svg)
 [![CI](https://github.com/DSorlov/snmp_printer/workflows/CI/badge.svg)](https://github.com/DSorlov/snmp_printer/actions/workflows/ci.yaml)
 [![hassfest](https://github.com/DSorlov/snmp_printer/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/snmp_printer/actions/workflows/hassfest.yaml)
@@ -19,6 +19,7 @@ Are you tired of different printers and different integrations? I was, this is a
 - :printer: **Wide Printer Support**: Compatible with Brother, Canon, HP, Konica Minolta, Kyocera, Lexmark, OKI, Panasonic, Ricoh, Samsung, Sharp, and Xerox printers
 - :bar_chart: **Monitoring**: Track printer status, toner levels, paper trays, drums, and more
 - :wrench: **SNMP Version Configuration**: Support for SNMP v1, v2c, and v3
+- :floppy_disk: **Cached Values**: Remembers last known sensor values when printer is offline, so you can check toner levels without turning on the printer
 - :robot: **Automation Ready**: Trigger automations based on printer events
 
 ## Supported Sensors

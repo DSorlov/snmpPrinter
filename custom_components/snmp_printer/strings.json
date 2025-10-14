@@ -59,7 +59,14 @@
   "entity": {
     "sensor": {
       "status": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "idle": "Idle",
+          "printing": "Printing",
+          "warming_up": "Warming up",
+          "offline": "Offline (cached data)",
+          "unknown": "Unknown"
+        }
       },
       "page_count": {
         "name": "Page count"
